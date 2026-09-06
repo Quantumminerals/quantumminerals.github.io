@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "QMC Quantum Minerals Corp"
+description = "A premium corporate website for QMC Quantum Minerals Corp, showcasing its mining operations, metals portfolio, sustainability commitments, investor information, careers, and contact details."
+version = "1.0.0"
+id = "artifacts/qmc-quantum-minerals"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19328
+
+[services.development]
+run = "pnpm --filter @workspace/qmc-quantum-minerals run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/qmc-quantum-minerals", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/qmc-quantum-minerals/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19328"
+BASE_PATH = "/"

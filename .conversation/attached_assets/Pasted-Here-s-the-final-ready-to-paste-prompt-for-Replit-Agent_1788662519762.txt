@@ -1,0 +1,61 @@
+Here’s the final ready-to-paste prompt for Replit Agent with all the products included:
+
+Prompt for Replit Agent:
+Create a modern, professional corporate website for a mining company called QMC Quantum Minerals Corp. The website must be heavily inspired by the style, structure, and feel of first-quantum.com, but with a fully dark theme throughout.
+Company Details
+
+Company Name: QMC Quantum Minerals Corp
+Address: Suite #1540 - 1100 Melville Street, Vancouver, B.C. Canada, V6E 4A6
+Theme: Complete dark theme (deep black/dark grey backgrounds, light text, elegant copper/gold accent colors)
+Logo: Create a clean geometric logo similar in style to First Quantum Minerals (abstract interlocking shapes) + the text “QMC Quantum Minerals Corp” next to it. Use this logo in the header on every page.
+
+Homepage Requirements
+
+Large hero section with a powerful headline (inspired by “We take a Different View”) and short supporting text about being expert responsible miners.
+Prominent Products section showcasing the metals the company mines, produces and sells.
+
+Must include these exact products with high-quality product images:
+Copper Cathodes
+Copper Concentrate
+Nickel
+Gold
+Cobalt
+Zinc
+Display each product as an elegant card with:
+Clear product name
+Realistic high-quality product photo
+Short description
+Smooth hover effect
+
+Key statistics section (production numbers, local employment, community investment, etc.)
+Operations across continents section
+Sustainability / community impact section
+Latest news / insights section
+Careers call-to-action
+Footer with full company address, navigation links, and social icons
+
+Other Required Pages
+
+About Us – Company story, values, leadership, and key stats
+What We Do / Operations – Overview of mining operations and projects
+Products – Detailed page for all six products with larger images and descriptions
+Sustainability – Environmental and community programs
+Investors – Placeholder for financial information and reports
+Careers – Company culture and career opportunities
+Contact – Must include:
+Full company address
+Working contact form (Name, Email, Subject, Message) that can send emails
+Embedded Google Map of the Vancouver address
+
+
+Design & Technical Requirements
+
+Fully responsive (mobile, tablet, desktop)
+Dark theme with elegant copper/gold accents
+Smooth animations and modern transitions
+Clean professional typography
+Sticky navigation header
+High-quality placeholder images for products, mines, and people
+Prefer modern stack (Next.js + Tailwind CSS or React + Tailwind)
+
+Make the overall website feel premium, trustworthy, and very close in quality and structure to the First Quantum Minerals website, but fully dark-themed and branded for QMC Quantum Minerals Corp.
