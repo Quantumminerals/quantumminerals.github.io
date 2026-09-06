@@ -381,6 +381,8 @@ html { scroll-behavior: smooth; }
 body { min-width: 320px; background: #101318; }
 ::selection { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
 .qmc-shell { overflow: clip; }
+.brand-lockup { display:flex; align-items:center; gap:.8rem; }
+.brand-name { display:flex; flex-direction:column; gap:.28rem; line-height:.92; }
 .display-font { font-family: var(--app-font-serif); letter-spacing: -0.045em; }
 .mono-font { font-family: var(--app-font-mono); letter-spacing: .06em; }
 .eyebrow { font-family: var(--app-font-mono); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase; color: hsl(var(--primary)); }
