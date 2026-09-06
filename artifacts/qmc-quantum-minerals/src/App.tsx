@@ -1,62 +1,221 @@
-import { type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ArrowDownRight, ArrowRight, ArrowUpRight, Check, ChevronRight, CircleArrowOutUpRight, Clock3, Download, Facebook, Globe2, Instagram, Leaf, Linkedin, Mail, MapPin, Menu, MoveUpRight, ShieldCheck, Users, X, Zap } from 'lucide-react';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import NotFound from '@/pages/not-found';
-import {
-  Route,
-  Switch,
-  useLocation,
-  Router as WouterRouter,
-} from 'wouter';
+import { Link, Route, Switch, useLocation } from 'wouter';
 
 const queryClient = new QueryClient();
+const CONTACT_EMAIL = 'connect@qmcminerals.com';
+
+const navItems = [
+  { href: '/about', label: 'About' },
+  { href: '/operations', label: 'Operations' },
+  { href: '/products', label: 'Products' },
+  { href: '/sustainability', label: 'Responsibility' },
+  { href: '/investors', label: 'Investors' },
+  { href: '/careers', label: 'Careers' },
+];
+
+const heroImage = 'https://images.unsplash.com/photo-1518331341768-8f9a9b96f5c9?auto=format&fit=crop&w=2200&q=85';
+const pitImage = 'https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1400&q=85';
+const mountainImage = 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=85';
+const copperImage = 'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1400&q=85';
+const aerialImage = 'https://images.unsplash.com/photo-1483347756197-71ef80e95f73?auto=format&fit=crop&w=1600&q=85';
+const productImages = [
+  'https://images.unsplash.com/photo-1610375461246-83df859d849d?auto=format&fit=crop&w=1000&q=85',
+  'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1000&q=85',
+  'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1000&q=85',
+  'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=1000&q=85',
+  'https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1000&q=85',
+  'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1000&q=85',
+];
+
+function Logo({ compact = false }: { compact?: boolean }) {
+  return (
+    <Link href="/" className="flex items-center gap-3 group" data-testid="link-logo">
+      <span className="relative flex h-9 w-9 items-center justify-center border border-[#d58442] text-[#e8aa62]">
+        <span className="absolute h-5 w-5 rotate-45 border border-[#d58442]" />
+        <span className="relative display-font text-[15px] font-bold tracking-[-.12em]">Q</span>
+      </span>
+      {!compact && <span className="leading-[.95]"><span className="block display-font text-[15px] font-bold tracking-[-.03em] text-[#f1e9db]">QMC</span><span className="mono-font text-[8px] uppercase text-[#9fa4a5]">Quantum Minerals Corp</span></span>}
+    </Link>
+  );
+}
+
+function Header() {
+  const [location] = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  return (
+    <header className="absolute inset-x-0 top-0 z-50 border-b border-white/[.1] bg-[#101318]/70 backdrop-blur-md">
+      <div className="mx-auto flex h-[76px] max-w-[1440px] items-center justify-between px-5 md:px-10">
+        <Logo />
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
+          {navItems.map((item) => <Link key={item.href} href={item.href} className={`qmc-link mono-font text-[10px] uppercase text-[#c3c5c2] hover:text-[#f1e9db] ${location === item.href ? 'active text-[#f1e9db]' : ''}`} data-testid={`link-nav-${item.label.toLowerCase()}`}>{item.label}</Link>)}
+        </nav>
+        <div className="hidden items-center gap-5 lg:flex">
+          <Link href="/contact" className="group flex items-center gap-2 mono-font text-[10px] uppercase text-[#e8aa62]" data-testid="link-header-contact">Connect with us <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" /></Link>
+        </div>
+        <button type="button" className="text-[#e8aa62] lg:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" data-testid="button-menu-toggle">{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
+      </div>
+      {menuOpen && <div className="border-t border-white/[.1] bg-[#101318] px-5 py-5 lg:hidden">
+        <div className="grid gap-4">{navItems.map((item) => <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="mono-font text-[11px] uppercase tracking-[.14em] text-[#c3c5c2]" data-testid={`link-mobile-${item.label.toLowerCase()}`}>{item.label}</Link>)}</div>
+        <Link href="/contact" onClick={() => setMenuOpen(false)} className="mt-5 flex items-center gap-2 border-t border-white/10 pt-5 mono-font text-[10px] uppercase text-[#e8aa62]" data-testid="link-mobile-contact">Start a conversation <ArrowRight size={14} /></Link>
+      </div>}
+    </header>
+  );
+}
+
+function Footer() {
+  return <footer className="border-t border-white/[.1] bg-[#0c0f12]">
+    <div className="mx-auto max-w-[1440px] px-5 py-14 md:px-10 md:py-20">
+      <div className="grid gap-12 md:grid-cols-[1.4fr_.8fr_.8fr_1fr]">
+        <div><Logo /><p className="mt-6 max-w-[270px] text-sm leading-6 text-[#8d9495]">Minerals for the systems that move the world. Based in Vancouver, built for the long horizon.</p><Link href="/contact" className="mt-7 inline-flex items-center gap-2 mono-font text-[10px] uppercase text-[#e8aa62]" data-testid="link-footer-contact">Talk to QMC <MoveUpRight size={13} /></Link></div>
+        <div><p className="eyebrow mb-5">Explore</p><div className="grid gap-3">{navItems.slice(0, 4).map((item) => <Link key={item.href} href={item.href} className="text-sm text-[#adb1ae] transition-colors hover:text-[#e8aa62]" data-testid={`link-footer-${item.label.toLowerCase()}`}>{item.label}</Link>)}</div></div>
+        <div><p className="eyebrow mb-5">Connect</p><div className="grid gap-3"><Link href="/investors" className="text-sm text-[#adb1ae] hover:text-[#e8aa62]" data-testid="link-footer-investors">Investor centre</Link><Link href="/careers" className="text-sm text-[#adb1ae] hover:text-[#e8aa62]" data-testid="link-footer-careers">Join the team</Link><a href={`mailto:${CONTACT_EMAIL}`} className="text-sm text-[#adb1ae] hover:text-[#e8aa62]" data-testid="link-footer-email">Email QMC</a></div></div>
+        <div><p className="eyebrow mb-5">Vancouver office</p><p className="text-sm leading-6 text-[#adb1ae]">Suite #1540<br />1100 Melville Street<br />Vancouver, B.C. Canada<br />V6E 4A6</p><div className="mt-7 flex items-center gap-4"><a href="https://www.linkedin.com" target="_blank" rel="noreferrer" aria-label="QMC on LinkedIn" className="text-[#8d9495] transition-colors hover:text-[#e8aa62]" data-testid="link-social-linkedin"><Linkedin size={16} /></a><a href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="QMC on Instagram" className="text-[#8d9495] transition-colors hover:text-[#e8aa62]" data-testid="link-social-instagram"><Instagram size={16} /></a><a href="https://www.facebook.com" target="_blank" rel="noreferrer" aria-label="QMC on Facebook" className="text-[#8d9495] transition-colors hover:text-[#e8aa62]" data-testid="link-social-facebook"><Facebook size={16} /></a></div></div>
+      </div>
+      <div className="mt-16 flex flex-col gap-4 border-t border-white/[.1] pt-6 md:flex-row md:items-center md:justify-between"><p className="mono-font text-[9px] uppercase tracking-[.12em] text-[#646c6e]">© 2024 QMC Quantum Minerals Corp. TSX Venture: QMC</p><p className="mono-font text-[9px] uppercase tracking-[.12em] text-[#646c6e]">Responsible by design / Vancouver, Canada</p></div>
+    </div>
+  </footer>;
+}
+
+function PageFrame({ children, eyebrow, title, intro, image }: { children: React.ReactNode; eyebrow: string; title: React.ReactNode; intro: string; image?: string }) {
+  return <><Header /><main className="pt-[76px]">{image ? <section className="relative min-h-[530px] overflow-hidden border-b border-white/[.1]"><img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-40 grayscale-[25%]" /><div className="absolute inset-0 bg-gradient-to-r from-[#101318] via-[#101318]/80 to-[#101318]/20" /><div className="relative mx-auto flex min-h-[530px] max-w-[1440px] items-end px-5 pb-16 md:px-10 md:pb-20"><div className="max-w-[720px] reveal"><p className="eyebrow mb-5">{eyebrow}</p><h1 className="display-font text-5xl leading-[.95] text-[#f1e9db] md:text-7xl">{title}</h1><p className="mt-7 max-w-[590px] text-base leading-7 text-[#b4b8b5] md:text-lg">{intro}</p></div></div></section> : <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 pb-16 pt-24 md:px-10 md:pb-24 md:pt-32"><p className="eyebrow mb-5 reveal">{eyebrow}</p><h1 className="display-font max-w-[850px] text-5xl leading-[.95] text-[#f1e9db] reveal-2 md:text-7xl">{title}</h1><p className="mt-7 max-w-[600px] text-base leading-7 text-[#b4b8b5] reveal-3 md:text-lg">{intro}</p></div></section>}<div>{children}</div></main><Footer /></>;
+}
+
+function ButtonLink({ href, children, secondary = false }: { href: string; children: React.ReactNode; secondary?: boolean }) {
+  return <Link href={href} className={`group inline-flex items-center gap-3 border px-5 py-3.5 mono-font text-[10px] uppercase tracking-[.13em] transition-all ${secondary ? 'border-white/20 text-[#c3c5c2] hover:border-[#e8aa62] hover:text-[#e8aa62]' : 'border-[#d58442] bg-[#d58442] text-[#121519] hover:bg-[#e8aa62]'}`} data-testid={`link-cta-${href.replace('/', '') || 'home'}`}>{children}<ArrowRight size={14} className="transition-transform group-hover:translate-x-1" /></Link>;
+}
 
 function Home() {
-  return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Replit Agent is building...
-        </h1>
-        <p className="mt-2 text-sm text-gray-600">
-          Your app will appear here once it's ready.
-        </p>
-      </div>
-    </div>
-  );
+  return <div className="qmc-shell qmc-noise bg-[#101318] text-[#f1e9db]"><Header /><main>
+    <section className="relative min-h-[720px] overflow-hidden border-b border-white/[.1] md:min-h-[820px]">
+      <img src={heroImage} alt="Rock strata and mineral landscape" className="hero-image absolute inset-0 h-full w-full object-cover opacity-50 grayscale-[20%]" /><div className="absolute inset-0 image-fade" /><div className="absolute inset-0 bg-gradient-to-t from-[#101318] via-transparent to-[#101318]/35" />
+      <div className="relative mx-auto flex min-h-[720px] max-w-[1440px] flex-col justify-end px-5 pb-16 pt-32 md:min-h-[820px] md:px-10 md:pb-24"><div className="max-w-[850px] reveal"><div className="mb-7 flex items-center gap-4"><span className="eyebrow">Vancouver / Canada</span><span className="h-px w-16 bg-[#d58442]" /></div><h1 className="display-font text-[clamp(3.4rem,9vw,8.4rem)] leading-[.84] text-[#f4eddf]">Materials<br /><span className="text-[#e8aa62]">with a future.</span></h1><p className="mt-8 max-w-[500px] text-base leading-7 text-[#c0c2bd] md:text-lg">QMC is building a focused minerals business for a more connected, electrified world — with the discipline to do it properly.</p><div className="mt-9 flex flex-wrap gap-3"><ButtonLink href="/operations">Explore our work</ButtonLink><ButtonLink href="/products" secondary>View our metals</ButtonLink></div></div><div className="mt-16 flex items-end justify-between border-t border-white/20 pt-5 reveal-3"><span className="mono-font text-[9px] uppercase tracking-[.16em] text-[#909594]">Scroll to discover</span><ArrowDownRight size={17} className="text-[#e8aa62]" /></div></div>
+    </section>
+    <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="grid gap-12 md:grid-cols-[.8fr_1.2fr] md:gap-24"><div><p className="eyebrow">The QMC point of view</p></div><div><h2 className="display-font max-w-[780px] text-4xl leading-[1.05] text-[#f1e9db] md:text-6xl">The world needs more minerals. It also needs better mining.</h2><p className="mt-7 max-w-[620px] text-base leading-7 text-[#aeb3b0]">We see responsible extraction as a promise, not a positioning line. It is how we choose ground, work with communities, manage water, build teams and earn the right to keep operating.</p><Link href="/about" className="mt-7 inline-flex items-center gap-3 mono-font text-[10px] uppercase text-[#e8aa62]" data-testid="link-home-about">Our story <CircleArrowOutUpRight size={15} /></Link></div></div></div></section>
+    <section className="border-b border-white/[.1]"><div className="mx-auto grid max-w-[1440px] md:grid-cols-[1.05fr_.95fr]"><div className="relative min-h-[460px] overflow-hidden"><img src={pitImage} alt="Aerial view of a working mineral landscape" className="h-full w-full object-cover grayscale-[30%] transition-transform duration-700 hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[#101318]/80 to-transparent" /><p className="absolute bottom-7 left-5 eyebrow md:left-10">Built for the long horizon</p></div><div className="flex flex-col justify-center px-5 py-16 md:px-16"><p className="eyebrow">A focused portfolio</p><h2 className="display-font mt-5 text-4xl leading-[1.03] text-[#f1e9db] md:text-5xl">Six materials.<br />One clear standard.</h2><p className="mt-6 max-w-[440px] text-sm leading-7 text-[#aeb3b0]">Copper, cobalt, nickel, gold, zinc and copper concentrate — each with a role in the global shift, and each requiring a different kind of care.</p><Link href="/products" className="mt-8 inline-flex items-center gap-3 mono-font text-[10px] uppercase text-[#e8aa62]" data-testid="link-home-products">Discover the portfolio <ArrowRight size={15} /></Link></div></div></section>
+    <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="flex items-end justify-between gap-6"><div><p className="eyebrow">The portfolio</p><h2 className="display-font mt-4 text-4xl text-[#f1e9db] md:text-5xl">Materials with a job to do.</h2></div><Link href="/products" className="hidden items-center gap-2 mono-font text-[10px] uppercase text-[#e8aa62] md:inline-flex" data-testid="link-home-products-grid">All products <ArrowRight size={14} /></Link></div><div className="mt-10 grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-3">{products.map(([name, symbol, tagline], index) => <Link href="/products" key={name} className="group bg-[#101318]"><div className="relative aspect-[1.18] overflow-hidden"><img src={productImages[index]} alt={`${name} material`} className="h-full w-full object-cover opacity-70 grayscale-[25%] transition duration-700 group-hover:scale-105 group-hover:opacity-100" /><div className="absolute inset-0 bg-gradient-to-t from-[#101318] via-transparent to-transparent" /><span className="absolute left-5 top-5 mono-font text-[10px] text-[#e8aa62]">{symbol}</span><ArrowUpRight size={17} className="absolute right-5 top-5 text-[#c4c6c2] opacity-0 transition group-hover:opacity-100" /></div><div className="flex items-end justify-between gap-4 p-5"><div><h3 className="display-font text-2xl text-[#f1e9db]">{name}</h3><p className="mt-2 text-sm text-[#899192]">{tagline}</p></div><ChevronRight size={17} className="mb-1 shrink-0 text-[#e8aa62]" /></div></Link>)}</div></div></section>
+    <section className="border-b border-white/[.1] bg-[#0c0f12]"><div className="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-20"><p className="eyebrow">QMC in numbers</p><div className="mt-9 grid grid-cols-2 gap-px bg-white/10 md:grid-cols-4">{[['06','materials in focus'],['03','core jurisdictions'],['24','month operating lens'],['01','connected team']].map(([value, label]) => <div key={label} className="bg-[#0c0f12] p-5 md:p-7"><p className="display-font text-5xl text-[#e8aa62] md:text-6xl">{value}</p><p className="mt-3 max-w-[150px] mono-font text-[9px] uppercase leading-4 text-[#7c8586]">{label}</p></div>)}</div></div></section>
+    <section className="border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="flex items-end justify-between gap-6"><div><p className="eyebrow">Where we work</p><h2 className="display-font mt-4 text-4xl text-[#f1e9db] md:text-5xl">Local knowledge.<br />Global relevance.</h2></div><Link href="/operations" className="hidden items-center gap-2 mono-font text-[10px] uppercase text-[#e8aa62] md:inline-flex" data-testid="link-home-operations">Explore operations <ArrowRight size={14} /></Link></div><div className="mt-10 grid gap-5 md:grid-cols-3">{[['Canada','Vancouver / Head office','Strategy, partnerships and capital'],['North America','Western corridor','Exploration and project development'],['Global markets','Connected by trade','Customers, partners and end users']].map(([region, place, copy], index) => <div key={region} className="card-lift border border-white/10 bg-[#151a1e] p-7 md:min-h-[220px] md:p-9"><div className="flex items-center justify-between"><Globe2 size={20} className="text-[#e8aa62]" /><span className="mono-font text-[9px] text-[#687173]">0{index + 1}</span></div><h3 className="display-font mt-14 text-2xl text-[#f1e9db]">{region}</h3><p className="mt-2 text-sm text-[#e8aa62]">{place}</p><p className="mt-4 text-sm leading-6 text-[#92999a]">{copy}</p></div>)}</div></div></section>
+    <section className="bg-[#0c0f12]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="flex flex-col justify-between gap-8 md:flex-row md:items-end"><div><p className="eyebrow">What guides us</p><h2 className="display-font mt-5 max-w-[640px] text-4xl leading-[1] text-[#f1e9db] md:text-5xl">Good business is measured in more than ounces.</h2></div><ButtonLink href="/sustainability" secondary>Our responsibility</ButtonLink></div><div className="mt-14 grid gap-px bg-white/[.12] md:grid-cols-3">{[['01','Listen first','The places where we work are partners in every decision.'],['02','Operate with rigor','Strong systems make room for better judgement in the field.'],['03','Leave more value','Local capability and lasting opportunity are part of the output.']].map(([num, title, copy]) => <div key={num} className="bg-[#0c0f12] p-7 md:p-9"><span className="mono-font text-xs text-[#e8aa62]">{num}</span><h3 className="display-font mt-14 text-2xl text-[#f1e9db]">{title}</h3><p className="mt-3 text-sm leading-6 text-[#949b9b]">{copy}</p></div>)}</div></div></section>
+    <section className="qmc-grid border-t border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="flex items-end justify-between gap-6"><div><p className="eyebrow">Latest insights</p><h2 className="display-font mt-4 text-4xl text-[#f1e9db] md:text-5xl">A closer look at the work.</h2></div><Link href="/contact" className="hidden items-center gap-2 mono-font text-[10px] uppercase text-[#e8aa62] md:inline-flex" data-testid="link-home-insights">Stay connected <ArrowRight size={14} /></Link></div><div className="mt-10 grid gap-5 md:grid-cols-3">{[['18 Jun 2024','Why copper still matters to the connected economy',copperImage],['02 May 2024','Listening first: building better community partnerships',mountainImage],['14 Mar 2024','The operating discipline behind responsible growth',pitImage]].map(([date, title, image]) => <article key={title as string} className="group border border-white/10 bg-[#151a1e]"><div className="aspect-[1.5] overflow-hidden"><img src={image as string} alt="" className="h-full w-full object-cover opacity-65 grayscale transition duration-700 group-hover:scale-105 group-hover:opacity-90" /></div><div className="p-6"><p className="mono-font text-[9px] uppercase text-[#e8aa62]">{date as string} / 3 min read</p><h3 className="display-font mt-5 text-2xl leading-tight text-[#f1e9db]">{title as string}</h3><Link href="/about" className="mt-7 inline-flex items-center gap-2 mono-font text-[10px] uppercase text-[#aeb3b0] group-hover:text-[#e8aa62]" data-testid={`link-insight-${(title as string).slice(0, 10).replaceAll(' ', '-').toLowerCase()}`}>Read story <ArrowUpRight size={14} /></Link></div></article>)}</div></div></section>
+  </main><Footer /></div>;
+}
+
+function About() {
+  return <PageFrame eyebrow="About QMC" title={<>A Canadian company.<br /><span className="text-[#e8aa62]">A global outlook.</span></>} intro="We are a Vancouver-based minerals company with a practical ambition: build a resilient, responsible business that creates value well beyond the mine gate." image={mountainImage}>
+    <section className="border-b border-white/[.1]"><div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-20 md:grid-cols-[.8fr_1.2fr] md:gap-24 md:px-10 md:py-28"><p className="eyebrow">Our story</p><div><p className="display-font text-3xl leading-[1.1] text-[#f1e9db] md:text-5xl">QMC was shaped in Vancouver, a city that knows the value of both natural resources and global connection.</p><p className="mt-7 max-w-[650px] text-base leading-7 text-[#aeb3b0]">We bring a grounded, technically minded approach to mineral development. Our portfolio is designed to be focused rather than sprawling, and our partnerships are built for the long term. The result is an operator that can move with conviction without losing sight of the details.</p></div></div></section>
+    <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><p className="eyebrow">At a glance</p><div className="mt-10 grid gap-0 border-l border-white/10 md:grid-cols-4">{[['06','materials in focus'],['03','core jurisdictions'],['01','connected team'],['24','month operating lens']].map(([n, l]) => <div key={l} className="border-r border-white/10 px-6 py-6 first:pl-5 md:px-8"><p className="stat-number display-font text-5xl text-[#e8aa62] md:text-6xl">{n}</p><p className="mt-3 max-w-[120px] mono-font text-[9px] uppercase leading-4 text-[#8e9696]">{l}</p></div>)}</div></div></section>
+    <section className="border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="grid gap-5 md:grid-cols-3">{[['Clarity over noise','We choose a small number of meaningful priorities and make them visible.'],['Long-term by default','Decisions are made with the next decade, not next quarter, in view.'],['Human scale','Every operation is ultimately a collection of people, families and places.']].map(([title, copy], i) => <div key={title} className="card-lift border border-white/10 p-7 md:min-h-[240px] md:p-9"><span className="eyebrow">0{i + 1}</span><h3 className="display-font mt-16 text-2xl text-[#f1e9db]">{title}</h3><p className="mt-3 text-sm leading-6 text-[#92999a]">{copy}</p></div>)}</div></div></section>
+    <section className="bg-[#0c0f12]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="mb-12 flex items-end justify-between"><div><p className="eyebrow">Leadership</p><h2 className="display-font mt-4 text-4xl text-[#f1e9db] md:text-5xl">People with range.</h2></div><Linkedin size={19} className="text-[#e8aa62]" /></div><div className="grid gap-px bg-white/10 md:grid-cols-3">{[['Elena Varga','Chief Executive Officer','Capital allocation / strategy'],['Marcus Chen','Chief Operating Officer','Operations / technical'],['Avery Sinclair','VP, Sustainability','Communities / environment']].map(([name, role, specialty]) => <div key={name} className="bg-[#0c0f12] p-7 md:p-9"><div className="flex h-24 w-24 items-end justify-end border border-[#d58442]/60 bg-[#1a2023] p-3"><span className="display-font text-3xl text-[#e8aa62]">{name.split(' ').map((n) => n[0]).join('')}</span></div><h3 className="display-font mt-6 text-2xl text-[#f1e9db]">{name}</h3><p className="mt-2 text-sm text-[#e8aa62]">{role}</p><p className="mt-5 mono-font text-[9px] uppercase text-[#737b7c]">{specialty}</p></div>)}</div></div></section>
+  </PageFrame>;
+}
+
+function Operations() {
+  return <PageFrame eyebrow="Operations" title={<>Grounded in place.<br /><span className="text-[#e8aa62]">Connected to the world.</span></>} intro="Our work starts with geological potential and continues through careful studies, strong partnerships and operating systems made for real conditions." image={aerialImage}>
+    <section className="border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="grid gap-12 md:grid-cols-[.7fr_1.3fr] md:gap-24"><div><p className="eyebrow">Operating model</p></div><div><h2 className="display-font text-4xl leading-[1.05] text-[#f1e9db] md:text-6xl">We work from the ground up.</h2><p className="mt-7 max-w-[660px] text-base leading-7 text-[#aeb3b0]">QMC combines disciplined technical work with a clear understanding of the communities and ecosystems around each opportunity. We advance projects in stages, keeping risk visible and optionality intact.</p></div></div></div></section>
+    <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><p className="eyebrow">Projects & opportunities</p><div className="mt-10 grid gap-5 md:grid-cols-[1.25fr_.75fr]"><div className="relative min-h-[420px] overflow-hidden border border-white/10"><img src={copperImage} alt="Dense forest canopy representing project landscapes" className="absolute inset-0 h-full w-full object-cover opacity-60 grayscale-[25%]" /><div className="absolute inset-0 bg-gradient-to-t from-[#101318] via-[#101318]/20 to-transparent" /><div className="absolute bottom-0 p-7 md:p-10"><div className="flex items-center gap-2"><span className="h-2 w-2 bg-[#e8aa62]" /><span className="mono-font text-[9px] uppercase text-[#e8aa62]">Flagship opportunity</span></div><h3 className="display-font mt-3 text-4xl text-[#f1e9db]">The next chapter<br />is being mapped.</h3><p className="mt-4 max-w-[390px] text-sm leading-6 text-[#b0b5b2]">QMC is advancing a portfolio of high-quality opportunities across the minerals that matter most.</p></div></div><div className="border border-white/10 bg-[#151a1e] p-7 md:p-10"><Globe2 size={23} className="text-[#e8aa62]" /><h3 className="display-font mt-16 text-3xl text-[#f1e9db]">Built for optionality.</h3><p className="mt-4 text-sm leading-6 text-[#92999a]">From early-stage ground to producing assets, our approach is designed to make the next right decision possible.</p><div className="mt-10 space-y-5 border-t border-white/10 pt-6">{['Technical diligence','Community alignment','Capital discipline'].map((item) => <div key={item} className="flex items-center gap-3 text-sm text-[#c3c5c2]"><Check size={15} className="text-[#e8aa62]" />{item}</div>)}</div></div></div></div></section>
+    <section className="border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="grid gap-8 md:grid-cols-3">{[['Exploration','Read the ground with patience, data and local knowledge.'],['Development','Turn geological confidence into investable, buildable plans.'],['Production','Operate safely, predictably and with respect for place.']].map(([title, copy], index) => <div key={title} className="border-t border-[#d58442] pt-5"><span className="mono-font text-[10px] text-[#e8aa62]">0{index + 1}</span><h3 className="display-font mt-12 text-3xl text-[#f1e9db]">{title}</h3><p className="mt-4 text-sm leading-6 text-[#92999a]">{copy}</p></div>)}</div></div></section>
+  </PageFrame>;
+}
+
+const products = [
+  ['Copper cathodes','Cu','Conductivity for a connected world','High-purity copper cathodes for power, construction, transport and the infrastructure between them.','Copper is the quiet architecture of modern life. QMC approaches its production with a focus on consistency, traceability and the customers who rely on every shipment.'],
+  ['Copper concentrate','Cu','The starting point for more','A versatile feedstock for smelters and refiners across global supply chains.','Our concentrate strategy is built around predictable quality and clear communication from source to customer.'],
+  ['Nickel','Ni','The metal in motion','A critical ingredient in high-performance alloys and the energy transition.','Nickel gives systems strength, density and endurance — qualities we bring to the way we work as well.'],
+  ['Gold','Au','Value with staying power','A store of value and a material with enduring relevance in technology and industry.','We treat gold as a long-horizon resource: carefully evaluated, responsibly advanced and transparently presented.'],
+  ['Cobalt','Co','Strength at the core','A specialist metal supporting energy storage, superalloys and high-reliability applications.','Cobalt calls for precision across the value chain. Our focus is on responsible sourcing and practical transparency.'],
+  ['Zinc','Zn','Protection, by nature','A versatile metal that extends the life of steel and protects the systems we build.','Zinc is a small intervention with a large effect — helping infrastructure last longer and use resources better.'],
+];
+
+function Products() {
+  const [selected, setSelected] = useState(0);
+  const product = products[selected];
+  return <PageFrame eyebrow="Products" title={<>The materials<br /><span className="text-[#e8aa62]">behind momentum.</span></>} intro="A considered portfolio of six metals — each with a distinct market, a practical use and a role in the systems people depend on." image={copperImage}>
+    <section className="border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-24"><div className="grid gap-10 md:grid-cols-[.8fr_1.2fr] md:gap-20"><div className="space-y-1">{products.map(([name, symbol], index) => <button type="button" key={name} onClick={() => setSelected(index)} className={`group flex w-full items-center justify-between border-b border-white/10 py-5 text-left transition-colors ${selected === index ? 'text-[#e8aa62]' : 'text-[#8f9696] hover:text-[#f1e9db]'}`} data-testid={`button-product-${symbol}`}><span className="flex items-center gap-5"><span className="mono-font text-[10px] text-[#596264]">0{index + 1}</span><span className="display-font text-2xl">{name}</span></span><ChevronRight size={17} className={selected === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} /></button>)}</div><div className="relative overflow-hidden border border-white/10 bg-[#151a1e]"><div className="absolute inset-0"><img src={productImages[selected]} alt={`${product[0]} material`} className="h-full w-full object-cover opacity-20 transition-opacity duration-500" /><div className="absolute inset-0 bg-[#151a1e]/80" /></div><div className="relative p-7 md:p-12"><div className="flex items-start justify-between"><span className="display-font text-8xl text-[#e8aa62]">{product[1]}</span><span className="eyebrow">Portfolio / {String(selected + 1).padStart(2, '0')}</span></div><h2 className="display-font mt-16 text-4xl text-[#f1e9db] md:text-5xl">{product[2]}</h2><p className="mt-6 text-base leading-7 text-[#c0c4c1]">{product[3]}</p><div className="mt-10 border-t border-white/10 pt-6"><p className="mono-font text-[9px] uppercase leading-5 text-[#80898a]">{product[4]}</p></div></div></div></div></div></section>
+    <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto flex max-w-[1440px] flex-col gap-8 px-5 py-20 md:flex-row md:items-end md:justify-between md:px-10 md:py-24"><div><p className="eyebrow">Trade with confidence</p><h2 className="display-font mt-4 max-w-[600px] text-4xl text-[#f1e9db] md:text-5xl">A portfolio is only as strong as the relationships around it.</h2></div><ButtonLink href="/contact">Speak with our team</ButtonLink></div></section>
+  </PageFrame>;
+}
+
+function Sustainability() {
+  return <PageFrame eyebrow="Responsibility" title={<>Earn the right<br /><span className="text-[#e8aa62]">to operate.</span></>} intro="Our responsibility work is practical, measurable and close to the ground: protect what matters, listen early and leave durable value behind." image={mountainImage}>
+    <section className="border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="grid gap-12 md:grid-cols-[.7fr_1.3fr] md:gap-24"><p className="eyebrow">Our commitment</p><div><p className="display-font text-3xl leading-[1.08] text-[#f1e9db] md:text-5xl">Progress should be visible in the places that make progress possible.</p><p className="mt-7 max-w-[650px] text-base leading-7 text-[#aeb3b0]">We design environmental and community programs around the realities of each location. That means strong baseline data, clear accountability, open dialogue and a willingness to change course when the evidence asks us to.</p></div></div></div></section>
+    <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><p className="eyebrow">Focus areas</p><div className="mt-10 grid gap-5 md:grid-cols-2">{[['Water stewardship', 'Measure first. Reduce use. Protect watersheds through every phase.', Leaf], ['Community partnerships', 'Build local capacity and create durable routes to participation.', Users], ['Climate & energy', 'Make energy use visible, then move the curve in the right direction.', Zap], ['Safety & wellbeing', 'No production goal outranks the people who make it possible.', ShieldCheck]].map(([title, copy, Icon]) => <div key={title as string} className="card-lift border border-white/10 bg-[#151a1e]/70 p-7 md:p-10"><Icon size={22} className="text-[#e8aa62]" /><h3 className="display-font mt-16 text-3xl text-[#f1e9db]">{title as string}</h3><p className="mt-4 max-w-[360px] text-sm leading-6 text-[#92999a]">{copy as string}</p><ArrowUpRight className="mt-10 text-[#586164]" size={17} /></div>)}</div></div></section>
+    <section className="border-b border-white/[.1]"><div className="mx-auto grid max-w-[1440px] md:grid-cols-2"><div className="min-h-[440px] bg-cover bg-center" style={{ backgroundImage: `url(${aerialImage})` }} /><div className="flex flex-col justify-center bg-[#0c0f12] px-5 py-16 md:px-16"><p className="eyebrow">The measure of it</p><p className="display-font mt-5 text-4xl leading-[1.05] text-[#f1e9db] md:text-5xl">Transparent enough to be challenged.</p><p className="mt-6 max-w-[440px] text-sm leading-7 text-[#92999a]">We will publish the commitments, indicators and updates that help partners understand where we are making progress — and where more work remains.</p><Link href="/contact" className="mt-8 inline-flex items-center gap-3 mono-font text-[10px] uppercase text-[#e8aa62]" data-testid="link-sustainability-contact">Ask us about our approach <ArrowRight size={15} /></Link></div></div></section>
+  </PageFrame>;
+}
+
+function Investors() {
+  return <PageFrame eyebrow="Investor centre" title={<>A clear view<br /><span className="text-[#e8aa62]">forward.</span></>} intro="Find the information you need to understand QMC's strategy, portfolio and progress. We believe good investor relations start with useful context." image={aerialImage}>
+    <section className="border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="grid gap-12 md:grid-cols-[.8fr_1.2fr] md:gap-24"><p className="eyebrow">QMC at a glance</p><div><h2 className="display-font text-4xl text-[#f1e9db] md:text-6xl">Focused capital.<br />Visible progress.</h2><p className="mt-7 max-w-[620px] text-base leading-7 text-[#aeb3b0]">We are building a minerals company around quality assets, careful capital allocation and a high-trust culture of communication.</p><div className="mt-10 grid grid-cols-2 gap-px bg-white/10 md:grid-cols-3"><div className="bg-[#101318] p-5"><p className="display-font text-3xl text-[#e8aa62]">QMC</p><p className="mt-2 mono-font text-[9px] uppercase text-[#747d7e]">TSX Venture</p></div><div className="bg-[#101318] p-5"><p className="display-font text-3xl text-[#e8aa62]">2024</p><p className="mt-2 mono-font text-[9px] uppercase text-[#747d7e]">Reporting year</p></div><div className="bg-[#101318] p-5"><p className="display-font text-3xl text-[#e8aa62]">CAD</p><p className="mt-2 mono-font text-[9px] uppercase text-[#747d7e]">Functional currency</p></div></div></div></div></div></section>
+    <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="eyebrow">Reports & information</p><h2 className="display-font mt-4 text-4xl text-[#f1e9db] md:text-5xl">The latest from QMC.</h2></div><span className="mono-font text-[9px] uppercase text-[#747d7e]">Placeholder library / updated quarterly</span></div><div className="mt-10 border-t border-white/10">{[['2024 Annual Information Form','Corporate profile and material information','Mar 28, 2024'],['Q3 2024 Management Discussion','Operating update and financial review','Nov 14, 2024'],['Corporate Presentation','Strategy, portfolio and responsible growth','Oct 02, 2024']].map(([title, sub, date]) => <div key={title} className="group flex flex-col gap-4 border-b border-white/10 py-6 md:flex-row md:items-center md:justify-between"><div className="flex items-start gap-5"><FileTextIcon /><div><h3 className="text-base text-[#e4e3dc]">{title}</h3><p className="mt-1 text-sm text-[#7f8888]">{sub}</p></div></div><div className="flex items-center justify-between gap-8 md:justify-end"><span className="mono-font text-[9px] uppercase text-[#697173]">{date}</span><button type="button" className="flex items-center gap-2 mono-font text-[9px] uppercase text-[#e8aa62]" onClick={() => window.alert('Report library placeholder — investor materials will be available here.')} data-testid={`button-download-${date}`}><Download size={14} /> Preview</button></div></div>)}</div></div></section>
+    <section className="border-b border-white/[.1]"><div className="mx-auto flex max-w-[1440px] flex-col gap-7 px-5 py-20 md:flex-row md:items-center md:justify-between md:px-10 md:py-24"><div><p className="eyebrow">Investor enquiries</p><p className="display-font mt-3 text-3xl text-[#f1e9db]">Have a question the library doesn't answer?</p></div><ButtonLink href="/contact">Contact investor relations</ButtonLink></div></section>
+  </PageFrame>;
+}
+
+function FileTextIcon() { return <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[#d58442]/50 text-[#e8aa62]"><Download size={15} /></span>; }
+
+function Careers() {
+  return <PageFrame eyebrow="Careers" title={<>Make the work<br /><span className="text-[#e8aa62]">matter.</span></>} intro="Join a team that thinks like an owner, learns in the open and understands that the best work is measured by what it makes possible for others." image={pitImage}>
+    <section className="border-b border-white/[.1]"><div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-20 md:grid-cols-[.8fr_1.2fr] md:gap-24 md:px-10 md:py-28"><p className="eyebrow">Life at QMC</p><div><p className="display-font text-3xl leading-[1.08] text-[#f1e9db] md:text-5xl">Small enough to know your work matters. Serious enough to make it count.</p><p className="mt-7 max-w-[650px] text-base leading-7 text-[#aeb3b0]">We bring together geologists, operators, analysts, community builders and curious generalists. Different disciplines, one standard: do the work properly and leave the room better than we found it.</p></div></div></section>
+    <section className="qmc-grid border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="grid gap-5 md:grid-cols-3">{[['Learn in public','Bring questions early. Share the useful parts.'],['Take the long view','Make decisions your future teammates can stand behind.'],['Stay close to reality','The best strategy still has to work on the ground.']].map(([title, copy]) => <div key={title} className="border-l border-[#d58442] p-7"><h3 className="display-font text-2xl text-[#f1e9db]">{title}</h3><p className="mt-4 text-sm leading-6 text-[#92999a]">{copy}</p></div>)}</div></div></section>
+    <section className="border-b border-white/[.1]"><div className="mx-auto max-w-[1440px] px-5 py-20 md:px-10 md:py-28"><div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="eyebrow">Open opportunities</p><h2 className="display-font mt-4 text-4xl text-[#f1e9db] md:text-5xl">Bring your point of view.</h2></div><span className="mono-font text-[9px] uppercase text-[#747d7e]">Vancouver / field / hybrid</span></div><div className="mt-10 border-t border-white/10">{[['Senior Geologist','Vancouver, BC','Exploration'],['Community Relations Lead','Western Canada','Sustainability'],['Financial Analyst','Vancouver, BC','Corporate']].map(([title, place, team]) => <div key={title} className="group flex flex-col gap-4 border-b border-white/10 py-6 md:flex-row md:items-center md:justify-between"><div><h3 className="text-base text-[#e4e3dc]">{title}</h3><p className="mt-1 mono-font text-[9px] uppercase text-[#747d7e]">{place} / {team}</p></div><Link href="/contact" className="flex items-center gap-2 mono-font text-[9px] uppercase text-[#e8aa62]" data-testid={`link-career-${title.toLowerCase().replaceAll(' ', '-')}`}>Enquire about role <ArrowRight size={14} /></Link></div>)}</div></div></section>
+  </PageFrame>;
+}
+
+function Contact() {
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const update = (key: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm({ ...form, [key]: event.target.value });
+  const submit = (event: React.FormEvent) => { event.preventDefault(); const subject = encodeURIComponent(form.subject); const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`); window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`; setSent(true); };
+  return <PageFrame eyebrow="Contact" title={<>Start a useful<br /><span className="text-[#e8aa62]">conversation.</span></>} intro="Whether you are an investor, customer, community partner or future colleague, we would like to hear what you are working on." image={mountainImage}>
+     <section className="border-b border-white/[.1]"><div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-20 md:grid-cols-[.8fr_1.2fr] md:gap-24 md:px-10 md:py-28"><div><p className="eyebrow">Vancouver office</p><h2 className="display-font mt-5 text-4xl text-[#f1e9db]">Come find us<br />on Melville Street.</h2><div className="mt-9 space-y-5 text-sm leading-6 text-[#aeb3b0]"><p className="flex gap-3"><MapPin size={17} className="mt-1 shrink-0 text-[#e8aa62]" />Suite #1540<br />1100 Melville Street<br />Vancouver, B.C. Canada<br />V6E 4A6</p><p className="flex items-center gap-3"><Mail size={16} className="text-[#e8aa62]" /><a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-[#e8aa62]" data-testid="link-contact-email">{CONTACT_EMAIL}</a></p><p className="flex items-center gap-3"><Clock3 size={16} className="text-[#e8aa62]" />Monday–Friday / 08:30–17:00 PT</p></div></div><div className="border border-white/10 bg-[#151a1e] p-6 md:p-10">{sent ? <div className="flex min-h-[410px] flex-col justify-center"><span className="flex h-12 w-12 items-center justify-center border border-[#d58442] text-[#e8aa62]"><Check size={20} /></span><h2 className="display-font mt-7 text-4xl text-[#f1e9db]">Email draft opened.</h2><p className="mt-4 max-w-[400px] text-sm leading-6 text-[#92999a]">Your email client should have a prepared note addressed to <a className="text-[#e8aa62]" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. If it did not open, use the email link directly.</p><button type="button" onClick={() => setSent(false)} className="mt-8 flex items-center gap-2 mono-font text-[10px] uppercase text-[#e8aa62]" data-testid="button-contact-reset">Send another <ArrowRight size={14} /></button></div> : <form onSubmit={submit} className="grid gap-6"><div className="grid gap-6 md:grid-cols-2"><label className="grid gap-2"><span className="eyebrow text-[9px]">Name</span><input required value={form.name} onChange={update('name')} className="border-b border-white/20 bg-transparent px-0 py-3 text-sm text-[#f1e9db] outline-none transition-colors focus:border-[#d58442]" data-testid="input-contact-name" /></label><label className="grid gap-2"><span className="eyebrow text-[9px]">Email</span><input required type="email" value={form.email} onChange={update('email')} className="border-b border-white/20 bg-transparent px-0 py-3 text-sm text-[#f1e9db] outline-none transition-colors focus:border-[#d58442]" data-testid="input-contact-email" /></label></div><label className="grid gap-2"><span className="eyebrow text-[9px]">Subject</span><input required value={form.subject} onChange={update('subject')} className="border-b border-white/20 bg-transparent px-0 py-3 text-sm text-[#f1e9db] outline-none transition-colors focus:border-[#d58442]" data-testid="input-contact-subject" /></label><label className="grid gap-2"><span className="eyebrow text-[9px]">Message</span><textarea required rows={5} value={form.message} onChange={update('message')} className="resize-none border-b border-white/20 bg-transparent px-0 py-3 text-sm leading-6 text-[#f1e9db] outline-none transition-colors focus:border-[#d58442]" data-testid="input-contact-message" /></label><button type="submit" className="group mt-2 inline-flex w-fit items-center gap-3 border border-[#d58442] bg-[#d58442] px-5 py-3.5 mono-font text-[10px] uppercase tracking-[.13em] text-[#121519] transition-colors hover:bg-[#e8aa62]" data-testid="button-contact-submit">Open email draft <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" /></button><p className="mono-font text-[9px] leading-5 text-[#687173]">Submitting opens a prepared email in your default mail app. Update the <span className="text-[#e8aa62]">CONTACT_EMAIL</span> setting with the official inbox when it is confirmed.</p></form>}</div></div></section>
+    <section className="qmc-grid"><div className="mx-auto max-w-[1440px] px-5 py-16 md:px-10 md:py-20"><div className="overflow-hidden border border-white/10"><iframe title="QMC Vancouver office map" src="https://www.openstreetmap.org/export/embed.html?bbox=-123.125%2C49.280%2C-123.105%2C49.292&layer=mapnik&marker=49.283%2C-123.115" className="h-[300px] w-full grayscale md:h-[390px]" loading="lazy" /></div><p className="mt-4 mono-font text-[9px] uppercase text-[#717a7a]">Vancouver / British Columbia / Canada</p></div></section>
+  </PageFrame>;
+}
+
+function NotFoundPage() {
+  return <div className="min-h-screen bg-[#101318] text-[#f1e9db]"><Header /><div className="mx-auto flex min-h-screen max-w-[1440px] flex-col justify-center px-5 pt-20 md:px-10"><p className="eyebrow">404 / off the map</p><h1 className="display-font mt-5 text-7xl text-[#e8aa62]">Not here.</h1><p className="mt-5 max-w-[420px] text-[#92999a]">The page you are looking for may have moved. The useful next step is back to the beginning.</p><ButtonLink href="/">Return home</ButtonLink></div></div>;
+}
+
+const pageMeta: Record<string, { title: string; description: string }> = {
+  '/': { title: 'QMC Quantum Minerals Corp | Materials with a future', description: 'QMC is a Vancouver-based minerals company focused on responsible extraction, strong partnerships and the materials that move a connected world.' },
+  '/about': { title: 'About QMC | Quantum Minerals Corp', description: 'Learn about QMC Quantum Minerals Corp, our Vancouver roots, operating principles, leadership and long-horizon approach.' },
+  '/operations': { title: 'Operations | QMC Quantum Minerals Corp', description: 'Explore the QMC operating model, project opportunities and the regions where our work connects local knowledge to global relevance.' },
+  '/products': { title: 'Products | QMC Quantum Minerals Corp', description: 'Discover QMC’s portfolio of copper cathodes, copper concentrate, nickel, gold, cobalt and zinc.' },
+  '/sustainability': { title: 'Responsibility | QMC Quantum Minerals Corp', description: 'See how QMC approaches water stewardship, community partnerships, climate, energy, safety and wellbeing.' },
+  '/investors': { title: 'Investor Centre | QMC Quantum Minerals Corp', description: 'Find QMC strategy, portfolio context and investor information in one clear view.' },
+  '/careers': { title: 'Careers | QMC Quantum Minerals Corp', description: 'Join QMC and help build a focused minerals business with work that matters on the ground.' },
+  '/contact': { title: 'Contact QMC | Quantum Minerals Corp', description: 'Connect with QMC Quantum Minerals Corp in Vancouver about partnerships, products, investing, communities or careers.' },
+};
+
+function PageMeta({ location }: { location: string }) {
+  useEffect(() => {
+    const meta = pageMeta[location] ?? { title: 'QMC Quantum Minerals Corp', description: 'QMC Quantum Minerals Corp is a Vancouver-based minerals company.' };
+    document.title = meta.title;
+    const description = document.querySelector('meta[name="description"]') ?? document.head.appendChild(document.createElement('meta'));
+    description.setAttribute('name', 'description');
+    description.setAttribute('content', meta.description);
+    const ogTitle = document.querySelector('meta[property="og:title"]') ?? document.head.appendChild(document.createElement('meta'));
+    ogTitle.setAttribute('property', 'og:title');
+    ogTitle.setAttribute('content', meta.title);
+    const ogDescription = document.querySelector('meta[property="og:description"]') ?? document.head.appendChild(document.createElement('meta'));
+    ogDescription.setAttribute('property', 'og:description');
+    ogDescription.setAttribute('content', meta.description);
+  }, [location]);
+  return null;
 }
 
 function Router() {
-  return (
-    // Keep a shared shell (sidebar, navbar) outside the boundary so it
-    // survives a page crash.
-    <RoutedErrorBoundary>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route component={NotFound} />
-      </Switch>
-    </RoutedErrorBoundary>
-  );
-}
-
-function RoutedErrorBoundary({ children }: { children: ReactNode }) {
   const [location] = useLocation();
-  return <ErrorBoundary resetKey={location}>{children}</ErrorBoundary>;
+  return <ErrorBoundary resetKey={location}><PageMeta location={location} /><Switch><Route path="/" component={Home} /><Route path="/about" component={About} /><Route path="/operations" component={Operations} /><Route path="/products" component={Products} /><Route path="/sustainability" component={Sustainability} /><Route path="/investors" component={Investors} /><Route path="/careers" component={Careers} /><Route path="/contact" component={Contact} /><Route component={NotFoundPage} /></Switch></ErrorBoundary>;
 }
 
 function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={queryClient}><TooltipProvider><div className="dark"><Router /></div><Toaster /></TooltipProvider></QueryClientProvider>;
 }
 
 export default App;
