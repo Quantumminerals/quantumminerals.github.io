@@ -38,32 +38,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Fix leadership section
+      - name: Fix Sarah Thompson styling
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
 
           path = Path('artifacts/qmc-quantum-minerals/src/App.tsx')
           text = path.read_text()
 
-          # Remove the three placeholder leadership cards completely.
-          text, count = re.subn(
-              r'<div className="mt-px grid gap-px bg-white/10 md:grid-cols-3">.*?</div>\n      </div>\n    </div>\n  </section>;',
-              '</div>\n    </div>\n  </section>;',
-              text,
-              count=1,
-              flags=re.S,
-          )
-          if count != 1:
-              raise SystemExit('Could not find the placeholder leadership cards.')
-
-          # Make Sarah's name clearly larger than her role/title and match the Head of Mining and Production color.
+          # Match Sarah Thompson's name to the existing Head of Mining and Production accent color.
           text = text.replace(
-              '<p className="eyebrow">Sarah Thompson</p>',
-              '<p className="display-font text-3xl leading-none tracking-[-.02em] text-[#e8aa62] md:text-4xl">Sarah Thompson</p>',
+              'className="display-font text-3xl leading-none tracking-[-.02em] text-[#f1e9db] md:text-4xl">Sarah Thompson',
+              'className="display-font text-3xl leading-none tracking-[-.02em] text-[#e8aa62] md:text-4xl">Sarah Thompson',
               1,
           )
+
+          # Keep the board title smaller than Sarah's name if the original styling is still present.
           text = text.replace(
               'className="display-font mt-4 text-4xl leading-[1.02] text-[#f1e9db] md:text-6xl">Member of the Board of Directors',
               'className="display-font mt-3 text-2xl leading-[1.08] text-[#f1e9db] md:text-3xl">Member of the Board of Directors',
