@@ -20,5 +20,34 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      (function () {
+        const quoteText = 'Mining is not only about the resource in the ground';
+        const descriptionText = 'As a member of the Board, Sarah brings an operator';
+        function moveLeadershipMessage() {
+          const quote = Array.from(document.querySelectorAll('p')).find((el) => el.textContent.includes(quoteText));
+          const description = Array.from(document.querySelectorAll('p')).find((el) => el.textContent.includes(descriptionText));
+          if (!quote || !description || quote.dataset.moved === 'true') return;
+          const rightPanel = quote.closest('.flex.flex-col.justify-between');
+          const card = rightPanel && rightPanel.parentElement && rightPanel.parentElement.parentElement;
+          if (!card || !card.parentElement) return;
+          const descriptionParent = description.parentElement;
+          quote.remove();
+          description.remove();
+          if (descriptionParent && descriptionParent !== quote.parentElement) descriptionParent.remove();
+          quote.className = 'max-w-[900px] text-base leading-7 text-[#d8d4c9] md:text-lg md:leading-8';
+          description.className = 'mt-4 max-w-[780px] text-sm leading-6 text-[#92999a] md:text-base md:leading-7';
+          const messageSection = document.createElement('div');
+          messageSection.className = 'mt-8 border-t border-white/10 pt-8 md:mt-10 md:pt-10';
+          messageSection.appendChild(quote);
+          messageSection.appendChild(description);
+          card.insertAdjacentElement('afterend', messageSection);
+          quote.dataset.moved = 'true';
+        }
+        const observer = new MutationObserver(moveLeadershipMessage);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        moveLeadershipMessage();
+      })();
+    </script>
   </body>
 </html>
