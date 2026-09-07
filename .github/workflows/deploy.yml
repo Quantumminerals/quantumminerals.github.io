@@ -1,9 +1,6 @@
 name: Deploy Quantum Minerals website
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -17,7 +14,6 @@ concurrency:
 
 jobs:
   build:
-    if: "!contains(github.event.head_commit.message, '[pages-sync]')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,16 +35,8 @@ jobs:
           from pathlib import Path
           path = Path('artifacts/qmc-quantum-minerals/src/App.tsx')
           text = path.read_text()
-          text = text.replace(
-              'className="display-font text-3xl leading-none tracking-[-.02em] text-[#f1e9db] md:text-4xl">Sarah Thompson',
-              'className="display-font text-3xl leading-none tracking-[-.02em] text-[#e8aa62] md:text-4xl">Sarah Thompson',
-              1,
-          )
-          text = text.replace(
-              'className="display-font mt-4 text-4xl leading-[1.02] text-[#f1e9db] md:text-6xl">Member of the Board of Directors',
-              'className="display-font mt-3 text-2xl leading-[1.08] text-[#f1e9db] md:text-3xl">Member of the Board of Directors',
-              1,
-          )
+          text = text.replace('className="display-font text-3xl leading-none tracking-[-.02em] text-[#f1e9db] md:text-4xl">Sarah Thompson', 'className="display-font text-3xl leading-none tracking-[-.02em] text-[#e8aa62] md:text-4xl">Sarah Thompson', 1)
+          text = text.replace('className="display-font mt-4 text-4xl leading-[1.02] text-[#f1e9db] md:text-6xl">Member of the Board of Directors', 'className="display-font mt-3 text-2xl leading-[1.08] text-[#f1e9db] md:text-3xl">Member of the Board of Directors', 1)
           path.write_text(text)
           PY
       - name: Build website
@@ -90,14 +78,7 @@ jobs:
             <meta property="og:url" content="https://quantumminerals.github.io/leadership/sarah-thompson/">
             <meta property="og:type" content="profile">
             <script type="application/ld+json">
-            {
-              "@context":"https://schema.org",
-              "@type":"Person",
-              "name":"Sarah Thompson",
-              "jobTitle":["Member of the Board of Directors","Head of Mining and Production"],
-              "worksFor":{"@type":"Organization","name":"Quantum Minerals","url":"https://quantumminerals.github.io/"},
-              "url":"https://quantumminerals.github.io/leadership/sarah-thompson/"
-            }
+            {"@context":"https://schema.org","@type":"Person","name":"Sarah Thompson","jobTitle":["Member of the Board of Directors","Head of Mining and Production"],"worksFor":{"@type":"Organization","name":"Quantum Minerals","url":"https://quantumminerals.github.io/"},"url":"https://quantumminerals.github.io/leadership/sarah-thompson/"}
             </script>
           </head>
           <body>
@@ -111,21 +92,13 @@ jobs:
           </body>
           </html>
           HTML
-
           cat > artifacts/qmc-quantum-minerals/dist/public/sitemap.xml <<'XML'
           <?xml version="1.0" encoding="UTF-8"?>
           <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            <url>
-              <loc>https://quantumminerals.github.io/</loc>
-              <lastmod>2026-09-07</lastmod>
-            </url>
-            <url>
-              <loc>https://quantumminerals.github.io/leadership/sarah-thompson/</loc>
-              <lastmod>2026-09-07</lastmod>
-            </url>
+            <url><loc>https://quantumminerals.github.io/</loc><lastmod>2026-09-07</lastmod></url>
+            <url><loc>https://quantumminerals.github.io/leadership/sarah-thompson/</loc><lastmod>2026-09-07</lastmod></url>
           </urlset>
           XML
-
           cat > artifacts/qmc-quantum-minerals/dist/public/robots.txt <<'TXT'
           User-agent: *
           Allow: /
@@ -137,40 +110,19 @@ jobs:
           from pathlib import Path
           import xml.etree.ElementTree as ET
           root = Path('artifacts/qmc-quantum-minerals/dist/public')
-          sitemap = root / 'sitemap.xml'
-          robots = root / 'robots.txt'
-          homepage = root / 'index.html'
-          sarah = root / 'leadership/sarah-thompson/index.html'
-          ET.parse(sitemap)
-          assert 'https://quantumminerals.github.io/sitemap.xml' in robots.read_text()
-          assert 'google-site-verification' in homepage.read_text()
-          assert 'Sarah Thompson' in sarah.read_text()
-          print('SEO files validated successfully.')
+          ET.parse(root / 'sitemap.xml')
+          assert 'https://quantumminerals.github.io/sitemap.xml' in (root / 'robots.txt').read_text()
+          assert 'google-site-verification' in (root / 'index.html').read_text()
+          assert 'Sarah Thompson' in (root / 'leadership/sarah-thompson/index.html').read_text()
           PY
-      - name: Sync built site to repository root
-        run: |
-          cp -a artifacts/qmc-quantum-minerals/dist/public/. ./
-          touch .nojekyll
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "Repository root is already synchronized."
-          else
-            git commit -m "[pages-sync] Sync built website to root"
-            git push origin HEAD:main
-          fi
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: artifacts/qmc-quantum-minerals/dist/public
 
   deploy:
-    if: "!contains(github.event.head_commit.message, '[pages-sync]')"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
