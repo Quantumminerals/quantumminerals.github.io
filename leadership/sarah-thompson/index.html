@@ -40,6 +40,8 @@
     .role .board { color: #69c7db; }
     .role .head { color: #d6a85f; }
     .bio { margin: 0 0 34px; color: #91a6b1; max-width: 650px; font-size: 17px; }
+    .message { margin: 0 0 34px; padding: 24px 26px; border-left: 3px solid #d6a85f; background: rgba(17,31,39,.55); border-radius: 0 14px 14px 0; color: #dbe5ea; font-size: 16px; line-height: 1.75; font-style: italic; max-width: 680px; }
+    .message-label { display: block; margin-bottom: 10px; color: #d6a85f; font-size: 11px; font-style: normal; font-weight: 800; text-transform: uppercase; letter-spacing: .16em; }
     .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; border-top: 1px solid #263943; padding-top: 24px; }
     .role-card { padding: 18px 20px; border: 1px solid #1e333d; border-radius: 14px; background: rgba(17,31,39,.55); }
     .role-card strong { display: block; margin-bottom: 6px; font-size: 13px; color: #e8f0f3; }
@@ -52,6 +54,7 @@
       .profile { grid-template-columns: 1fr; gap: 38px; }
       .photo-frame { max-width: 330px; margin: 0 auto; }
       h1 { font-size: clamp(32px, 10vw, 46px); white-space: nowrap; }
+      .message { padding: 20px 20px; font-size: 15px; }
       .roles { grid-template-columns: 1fr; }
     }
   </style>
@@ -68,6 +71,10 @@
         <h1 id="person-name">Sarah Thompson</h1>
         <p class="role"><span class="board">Member of the Board of Directors</span><br /><span class="head">Head of Mining and Production</span></p>
         <p class="bio">Sarah Thompson serves as a Member of the Board of Directors and Head of Mining and Production at Quantum Minerals.</p>
+        <blockquote class="message">
+          <span class="message-label">Sarah Thompson's Message</span>
+          “Mining is not only about the resource in the ground; it is about the people, systems and decisions that bring it forward safely. My focus is to make production disciplined, resilient and respectful of the communities and environments around our operations.”
+        </blockquote>
         <div class="roles">
           <div class="role-card board-card"><strong>Board of Directors</strong><span>Member of the Board of Directors</span></div>
           <div class="role-card head-card"><strong>Mining &amp; Production</strong><span>Head of Mining and Production</span></div>
