@@ -49,3 +49,6 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Deployment complete
+        run: echo "GitHub Pages deployment completed successfully."
