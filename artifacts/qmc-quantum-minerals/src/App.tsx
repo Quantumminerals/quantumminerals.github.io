@@ -97,8 +97,8 @@ function LeadershipSpotlight() {
           </div>
           <div className="flex flex-col justify-between p-7 md:p-12">
             <div>
-              <p className="eyebrow">Sarah Thompson</p>
-              <h3 className="display-font mt-4 text-4xl leading-[1.02] text-[#f1e9db] md:text-6xl">Member of the Board of Directors</h3>
+              <p className="display-font text-3xl leading-none tracking-[-.02em] text-[#f1e9db] md:text-4xl">Sarah Thompson</p>
+              <h3 className="display-font mt-3 text-2xl leading-[1.08] text-[#f1e9db] md:text-3xl">Member of the Board of Directors</h3>
               <p className="mt-4 text-base text-[#e8aa62] md:text-lg">Head of Mining and Production</p>
               <p className="mt-8 max-w-[620px] text-xl leading-8 text-[#d8d4c9] md:text-2xl md:leading-9">“Mining is not only about the resource in the ground; it is about the people, systems and decisions that bring it forward safely. My focus is to make production disciplined, resilient and respectful of the communities and environments around our operations.”</p>
             </div>
@@ -107,17 +107,7 @@ function LeadershipSpotlight() {
             </div>
           </div>
         </div>
-        <div className="mt-px grid gap-px bg-white/10 md:grid-cols-3">
-          {[['Elena Varga','Chief Executive Officer','Capital allocation / strategy'],['Marcus Chen','Chief Operating Officer','Operations / technical'],['Avery Sinclair','VP, Sustainability','Communities / environment']].map(([name, role, specialty]) => (
-            <div key={name} className="bg-[#0c0f12] p-7 md:p-9">
-              <div className="flex h-24 w-24 items-end justify-end border border-[#d58442]/60 bg-[#1a2023] p-3"><span className="display-font text-3xl text-[#e8aa62]">{name.split(' ').map((n) => n[0]).join('')}</span></div>
-              <h3 className="display-font mt-6 text-2xl text-[#f1e9db]">{name}</h3>
-              <p className="mt-2 text-sm text-[#e8aa62]">{role}</p>
-              <p className="mt-5 mono-font text-[9px] uppercase text-[#737b7c]">{specialty}</p>
-            </div>
-          ))}
         </div>
-      </div>
     </div>
   </section>;
 }
