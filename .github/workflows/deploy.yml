@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   build:
+    if: "!contains(github.event.head_commit.message, '[pages-sync]')"
     runs-on: ubuntu-latest
 
     steps:
@@ -44,6 +45,20 @@ jobs:
           NODE_ENV: production
         run: pnpm --filter @workspace/qmc-quantum-minerals build
 
+      - name: Sync built site to repository root
+        run: |
+          cp -a artifacts/qmc-quantum-minerals/dist/public/. ./
+          touch .nojekyll
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Repository root is already synchronized."
+          else
+            git commit -m "[pages-sync] Sync built website to root"
+            git push origin HEAD:main
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
@@ -55,6 +70,7 @@ jobs:
           path: artifacts/qmc-quantum-minerals/dist/public
 
   deploy:
+    if: "!contains(github.event.head_commit.message, '[pages-sync]')"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -65,5 +81,5 @@ jobs:
 
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
+        id: deployment
