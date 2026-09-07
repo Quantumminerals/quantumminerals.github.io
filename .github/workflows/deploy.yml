@@ -19,64 +19,51 @@ jobs:
   build:
     if: "!contains(github.event.head_commit.message, '[pages-sync]')"
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Fix Sarah Thompson styling
         run: |
           python - <<'PY'
           from pathlib import Path
-
           path = Path('artifacts/qmc-quantum-minerals/src/App.tsx')
           text = path.read_text()
-
           text = text.replace(
               'className="display-font text-3xl leading-none tracking-[-.02em] text-[#f1e9db] md:text-4xl">Sarah Thompson',
               'className="display-font text-3xl leading-none tracking-[-.02em] text-[#e8aa62] md:text-4xl">Sarah Thompson',
               1,
           )
-
           text = text.replace(
               'className="display-font mt-4 text-4xl leading-[1.02] text-[#f1e9db] md:text-6xl">Member of the Board of Directors',
               'className="display-font mt-3 text-2xl leading-[1.08] text-[#f1e9db] md:text-3xl">Member of the Board of Directors',
               1,
           )
-
           path.write_text(text)
           PY
-
       - name: Build website
         env:
           PORT: 4173
           BASE_PATH: /
           NODE_ENV: production
         run: pnpm --filter @workspace/qmc-quantum-minerals build
-
       - name: Add Google Search Console verification tag
         run: |
           python - <<'PY'
           from pathlib import Path
-
           path = Path('artifacts/qmc-quantum-minerals/dist/public/index.html')
           text = path.read_text()
           tag = '<meta name="google-site-verification" content="OkFN3v5sBUzXXAt37gnnSB2z0FYNG6Dd6GNAZT2rjuA" />'
-
           if 'google-site-verification' not in text:
               marker = '<meta name="viewport"'
               if marker in text:
@@ -85,12 +72,11 @@ jobs:
                   text = text.replace('<head>', '<head>\n    ' + tag, 1)
               path.write_text(text)
           PY
-
       - name: Add Sarah Thompson SEO page and sitemap
         run: |
           mkdir -p artifacts/qmc-quantum-minerals/dist/public/leadership/sarah-thompson
           cat > artifacts/qmc-quantum-minerals/dist/public/leadership/sarah-thompson/index.html <<'HTML'
-          <!DOCTYPE html>
+          <!doctype html>
           <html lang="en">
           <head>
             <meta charset="UTF-8">
@@ -101,40 +87,25 @@ jobs:
             <link rel="canonical" href="https://quantumminerals.github.io/leadership/sarah-thompson/">
             <meta property="og:title" content="Sarah Thompson | Quantum Minerals">
             <meta property="og:description" content="Sarah Thompson — Member of the Board of Directors and Head of Mining and Production at Quantum Minerals.">
-            <meta property="og:type" content="profile">
             <meta property="og:url" content="https://quantumminerals.github.io/leadership/sarah-thompson/">
-            <meta property="og:image" content="https://quantumminerals.github.io/leadership/sarah-thompson.jpg">
-            <meta name="twitter:card" content="summary_large_image">
-            <meta name="twitter:title" content="Sarah Thompson | Quantum Minerals">
-            <meta name="twitter:description" content="Sarah Thompson — Member of the Board of Directors and Head of Mining and Production at Quantum Minerals.">
-            <meta name="twitter:image" content="https://quantumminerals.github.io/leadership/sarah-thompson.jpg">
+            <meta property="og:type" content="profile">
             <script type="application/ld+json">
             {
-              "@context": "https://schema.org",
-              "@type": "Person",
-              "name": "Sarah Thompson",
-              "jobTitle": ["Member of the Board of Directors", "Head of Mining and Production"],
-              "image": "https://quantumminerals.github.io/leadership/sarah-thompson.jpg",
-              "url": "https://quantumminerals.github.io/leadership/sarah-thompson/",
-              "worksFor": {
-                "@type": "Organization",
-                "name": "Quantum Minerals",
-                "url": "https://quantumminerals.github.io/"
-              },
-              "affiliation": {
-                "@type": "Organization",
-                "name": "Quantum Minerals",
-                "url": "https://quantumminerals.github.io/"
-              }
+              "@context":"https://schema.org",
+              "@type":"Person",
+              "name":"Sarah Thompson",
+              "jobTitle":["Member of the Board of Directors","Head of Mining and Production"],
+              "worksFor":{"@type":"Organization","name":"Quantum Minerals","url":"https://quantumminerals.github.io/"},
+              "url":"https://quantumminerals.github.io/leadership/sarah-thompson/"
             }
             </script>
           </head>
           <body>
             <main>
               <h1>Sarah Thompson</h1>
-              <p><strong>Member of the Board of Directors</strong></p>
-              <p>Head of Mining and Production</p>
-              <p>Sarah Thompson is a member of the Board of Directors and Head of Mining and Production at Quantum Minerals.</p>
+              <h2>Member of the Board of Directors</h2>
+              <p>Head of Mining and Production at Quantum Minerals.</p>
+              <p>Sarah Thompson is a Member of the Board of Directors and Head of Mining and Production at Quantum Minerals.</p>
               <p><a href="/">Quantum Minerals</a></p>
             </main>
           </body>
@@ -144,8 +115,14 @@ jobs:
           cat > artifacts/qmc-quantum-minerals/dist/public/sitemap.xml <<'XML'
           <?xml version="1.0" encoding="UTF-8"?>
           <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            <url><loc>https://quantumminerals.github.io/</loc></url>
-            <url><loc>https://quantumminerals.github.io/leadership/sarah-thompson/</loc></url>
+            <url>
+              <loc>https://quantumminerals.github.io/</loc>
+              <lastmod>2026-09-07</lastmod>
+            </url>
+            <url>
+              <loc>https://quantumminerals.github.io/leadership/sarah-thompson/</loc>
+              <lastmod>2026-09-07</lastmod>
+            </url>
           </urlset>
           XML
 
@@ -154,7 +131,22 @@ jobs:
           Allow: /
           Sitemap: https://quantumminerals.github.io/sitemap.xml
           TXT
-
+      - name: Validate SEO files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          root = Path('artifacts/qmc-quantum-minerals/dist/public')
+          sitemap = root / 'sitemap.xml'
+          robots = root / 'robots.txt'
+          homepage = root / 'index.html'
+          sarah = root / 'leadership/sarah-thompson/index.html'
+          ET.parse(sitemap)
+          assert 'https://quantumminerals.github.io/sitemap.xml' in robots.read_text()
+          assert 'google-site-verification' in homepage.read_text()
+          assert 'Sarah Thompson' in sarah.read_text()
+          print('SEO files validated successfully.')
+          PY
       - name: Sync built site to repository root
         run: |
           cp -a artifacts/qmc-quantum-minerals/dist/public/. ./
@@ -168,12 +160,10 @@ jobs:
             git commit -m "[pages-sync] Sync built website to root"
             git push origin HEAD:main
           fi
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -184,11 +174,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
-
     needs: build
-
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
