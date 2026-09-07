@@ -20,49 +20,56 @@
     "jobTitle": ["Member of the Board of Directors", "Head of Mining and Production"],
     "image": "https://quantumminerals.github.io/leadership/sarah-thompson.jpg",
     "url": "https://quantumminerals.github.io/leadership/sarah-thompson/",
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Quantum Minerals",
-      "url": "https://quantumminerals.github.io/"
-    }
+    "worksFor": { "@type": "Organization", "name": "Quantum Minerals", "url": "https://quantumminerals.github.io/" }
   }
   </script>
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #0b1117; color: #f3f6f8; line-height: 1.6; }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 48px 24px 72px; }
+    body { margin: 0; font-family: Inter, Arial, Helvetica, sans-serif; background: #071017; color: #dbe5ea; line-height: 1.65; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 42px 28px 80px; }
     a { color: inherit; }
-    .back { display: inline-block; margin-bottom: 42px; color: #b8c5ce; text-decoration: none; }
-    .back:hover { text-decoration: underline; }
-    .profile { display: grid; grid-template-columns: 320px 1fr; gap: 52px; align-items: start; }
-    .photo { width: 100%; max-width: 320px; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 18px; display: block; }
-    .eyebrow { margin: 0 0 10px; color: #aab8c2; text-transform: uppercase; letter-spacing: .12em; font-size: 13px; font-weight: 700; }
-    h1 { margin: 0 0 18px; font-size: clamp(42px, 7vw, 72px); line-height: 1.02; letter-spacing: -.03em; }
-    .role { margin: 0 0 28px; font-size: 21px; color: #d2dbe1; }
-    .bio { margin: 0 0 30px; color: #b9c4cc; max-width: 620px; font-size: 17px; }
-    .roles { border-top: 1px solid #26313a; padding-top: 22px; }
-    .roles strong { display: block; font-size: 14px; color: #eef2f4; margin-bottom: 7px; }
-    .roles span { display: block; color: #aebac2; margin-bottom: 14px; }
-    @media (max-width: 720px) { .wrap { padding-top: 30px; } .profile { grid-template-columns: 1fr; gap: 30px; } .photo { max-width: 260px; } }
+    .back { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 58px; color: #8fa6b2; text-decoration: none; font-size: 14px; font-weight: 600; transition: color .2s ease; }
+    .back:hover { color: #d6e7ee; }
+    .profile { display: grid; grid-template-columns: minmax(260px, 390px) 1fr; gap: 70px; align-items: center; }
+    .photo-frame { position: relative; max-width: 390px; padding: 10px; border: 1px solid #263b46; border-radius: 24px; background: linear-gradient(145deg, #10232d, #09151c); box-shadow: 0 24px 60px rgba(0,0,0,.32); }
+    .photo { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 16px; display: block; }
+    .eyebrow { margin: 0 0 14px; color: #6fc3d7; text-transform: uppercase; letter-spacing: .2em; font-size: 12px; font-weight: 800; }
+    h1 { margin: 0 0 22px; color: #f5f8fa; font-size: clamp(44px, 6vw, 76px); line-height: 1; letter-spacing: -.045em; font-weight: 700; }
+    .role { margin: 0 0 30px; font-size: clamp(20px, 2.2vw, 25px); line-height: 1.5; font-weight: 600; }
+    .role .board { color: #69c7db; }
+    .role .head { color: #d6a85f; }
+    .bio { margin: 0 0 34px; color: #91a6b1; max-width: 650px; font-size: 17px; }
+    .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; border-top: 1px solid #263943; padding-top: 24px; }
+    .role-card { padding: 18px 20px; border: 1px solid #1e333d; border-radius: 14px; background: rgba(17,31,39,.55); }
+    .role-card strong { display: block; margin-bottom: 6px; font-size: 13px; color: #e8f0f3; }
+    .role-card.board-card strong { color: #69c7db; }
+    .role-card.head-card strong { color: #d6a85f; }
+    .role-card span { display: block; color: #8da2ad; font-size: 14px; }
+    @media (max-width: 760px) {
+      .wrap { padding: 30px 20px 60px; }
+      .back { margin-bottom: 38px; }
+      .profile { grid-template-columns: 1fr; gap: 38px; }
+      .photo-frame { max-width: 330px; margin: 0 auto; }
+      .roles { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
   <main class="wrap">
     <a class="back" href="/">← Quantum Minerals</a>
     <section class="profile" aria-labelledby="person-name">
-      <div>
+      <div class="photo-frame">
         <img class="photo" src="/leadership/sarah-thompson.jpg" alt="Sarah Thompson" />
       </div>
       <div>
         <p class="eyebrow">Leadership</p>
         <h1 id="person-name">Sarah Thompson</h1>
-        <p class="role">Member of the Board of Directors<br />Head of Mining and Production</p>
+        <p class="role"><span class="board">Member of the Board of Directors</span><br /><span class="head">Head of Mining and Production</span></p>
         <p class="bio">Sarah Thompson serves as a Member of the Board of Directors and Head of Mining and Production at Quantum Minerals.</p>
         <div class="roles">
-          <strong>Current roles</strong>
-          <span>Member of the Board of Directors</span>
-          <span>Head of Mining and Production</span>
+          <div class="role-card board-card"><strong>Board of Directors</strong><span>Member of the Board of Directors</span></div>
+          <div class="role-card head-card"><strong>Mining &amp; Production</strong><span>Head of Mining and Production</span></div>
         </div>
       </div>
     </section>
