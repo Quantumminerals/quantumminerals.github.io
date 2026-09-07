@@ -58,10 +58,10 @@ jobs:
           if count != 1:
               raise SystemExit('Could not find the placeholder leadership cards.')
 
-          # Make Sarah's name clearly larger than her role/title.
+          # Make Sarah's name clearly larger than her role/title and match the Head of Mining and Production color.
           text = text.replace(
               '<p className="eyebrow">Sarah Thompson</p>',
-              '<p className="display-font text-3xl leading-none tracking-[-.02em] text-[#f1e9db] md:text-4xl">Sarah Thompson</p>',
+              '<p className="display-font text-3xl leading-none tracking-[-.02em] text-[#e8aa62] md:text-4xl">Sarah Thompson</p>',
               1,
           )
           text = text.replace(
