@@ -97,7 +97,7 @@ function LeadershipSpotlight() {
           </div>
           <div className="flex flex-col justify-between p-7 md:p-12">
             <div>
-              <p className="display-font text-3xl leading-none tracking-[-.02em] text-[#f1e9db] md:text-4xl">Sarah Thompson</p>
+              <p className="display-font text-3xl leading-none tracking-[-.02em] text-[#e8aa62] md:text-4xl">Sarah Thompson</p>
               <h3 className="display-font mt-3 text-2xl leading-[1.08] text-[#f1e9db] md:text-3xl">Member of the Board of Directors</h3>
               <p className="mt-4 text-base text-[#e8aa62] md:text-lg">Head of Mining and Production</p>
               <p className="mt-8 max-w-[620px] text-xl leading-8 text-[#d8d4c9] md:text-2xl md:leading-9">“Mining is not only about the resource in the ground; it is about the people, systems and decisions that bring it forward safely. My focus is to make production disciplined, resilient and respectful of the communities and environments around our operations.”</p>
@@ -150,7 +150,7 @@ function About() {
              <div className="flex flex-col justify-between p-7 md:p-12">
                <div>
                  <p className="eyebrow">Sarah Thompson</p>
-                 <h3 className="display-font mt-4 text-4xl leading-[1.02] text-[#f1e9db] md:text-6xl">Member of the Board of Directors</h3>
+                 <h3 className="display-font mt-3 text-2xl leading-[1.08] text-[#f1e9db] md:text-3xl">Member of the Board of Directors</h3>
                  <p className="mt-4 text-base text-[#e8aa62] md:text-lg">Head of Mining and Production</p>
                  <p className="mt-8 max-w-[620px] text-xl leading-8 text-[#d8d4c9] md:text-2xl md:leading-9">“Mining is not only about the resource in the ground; it is about the people, systems and decisions that bring it forward safely. My focus is to make production disciplined, resilient and respectful of the communities and environments around our operations.”</p>
                </div>
