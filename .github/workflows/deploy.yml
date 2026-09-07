@@ -46,14 +46,12 @@ jobs:
           path = Path('artifacts/qmc-quantum-minerals/src/App.tsx')
           text = path.read_text()
 
-          # Match Sarah Thompson's name to the existing Head of Mining and Production accent color.
           text = text.replace(
               'className="display-font text-3xl leading-none tracking-[-.02em] text-[#f1e9db] md:text-4xl">Sarah Thompson',
               'className="display-font text-3xl leading-none tracking-[-.02em] text-[#e8aa62] md:text-4xl">Sarah Thompson',
               1,
           )
 
-          # Keep the board title smaller than Sarah's name if the original styling is still present.
           text = text.replace(
               'className="display-font mt-4 text-4xl leading-[1.02] text-[#f1e9db] md:text-6xl">Member of the Board of Directors',
               'className="display-font mt-3 text-2xl leading-[1.08] text-[#f1e9db] md:text-3xl">Member of the Board of Directors',
@@ -69,6 +67,24 @@ jobs:
           BASE_PATH: /
           NODE_ENV: production
         run: pnpm --filter @workspace/qmc-quantum-minerals build
+
+      - name: Add Google Search Console verification tag
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('artifacts/qmc-quantum-minerals/dist/public/index.html')
+          text = path.read_text()
+          tag = '<meta name="google-site-verification" content="OkFN3v5sBUzXXAt37gnnSB2z0FYNG6Dd6GNAZT2rjuA" />'
+
+          if 'google-site-verification' not in text:
+              marker = '<meta name="viewport"'
+              if marker in text:
+                  text = text.replace(marker, tag + '\n    ' + marker, 1)
+              else:
+                  text = text.replace('<head>', '<head>\n    ' + tag, 1)
+              path.write_text(text)
+          PY
 
       - name: Add Sarah Thompson SEO page and sitemap
         run: |
